@@ -20,19 +20,17 @@ const NavBar = ({ isAdmin, view, onViewChange, isLanding, adminSetupRequired }) 
     <nav className={`nav-bar ${isLanding ? "nav-bar--landing" : ""}`}>
       <div className="nav-bar__left">
         <h1>KL Connect</h1>
-        {user && (
+      </div>
+      {user ? (
+        <div className="nav-actions">
+          <button className={`nav-tab ${view === "chat" ? "nav-tab--active" : ""}`} onClick={() => onViewChange("chat")} type="button">Chats</button>
+          {isAdmin && <button className={`nav-tab ${view === "admin" ? "nav-tab--active" : ""}`} onClick={() => onViewChange("admin")} type="button">Admin</button>}
           <Avatar
             photoURL={user.photoURL}
             name={user.displayName}
             size={32}
             className="nav-bar__avatar"
           />
-        )}
-      </div>
-      {user ? (
-        <div className="nav-actions">
-          <button className={`nav-tab ${view === "chat" ? "nav-tab--active" : ""}`} onClick={() => onViewChange("chat")} type="button">Chats</button>
-          {isAdmin && <button className={`nav-tab ${view === "admin" ? "nav-tab--active" : ""}`} onClick={() => onViewChange("admin")} type="button">Admin</button>}
           <button onClick={signOut} className="sign-out" type="button">Sign Out</button>
         </div>
       ) : (

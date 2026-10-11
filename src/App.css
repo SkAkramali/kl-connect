@@ -89,6 +89,7 @@ button {
   letter-spacing: 0.03em;
 }
 .nav-actions { display: flex; align-items: center; gap: 8px; }
+.nav-bar__avatar { flex: 0 0 auto; }
 .nav-tab { background: transparent; color: var(--text-muted); border: 0; padding: 9px 12px; border-radius: 8px; font-weight: 600; }
 .nav-tab:hover, .nav-tab--active { color: var(--text-primary); background: rgba(37,211,102,.12); }
 .nav-bar--landing { background: rgba(255,255,255,.92); color:#14231c; border-color:#e3ebe6; }
@@ -744,20 +745,6 @@ button {
 .send-message input:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-}
-
-.app-footer {
-  border-top: 1px solid var(--border-soft);
-  padding: 18px 32px 28px;
-  font-size: 0.85rem;
-  color: var(--text-soft);
-  text-align: center;
-}
-
-.app-footer a {
-  color: var(--accent);
-  font-weight: 600;
-  
 }
 
 /* Light public landing page; chat remains intentionally dark. */

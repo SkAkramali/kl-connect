@@ -120,26 +120,6 @@ function App() {
           )}
         </div>
       )}
-      {user && <footer className="app-footer">
-        <a
-          href="https://tech.timonwa.com/blog/create-multi-room-chat-app-using-react-firebase"
-          target="_blank"
-          rel="noreferrer">
-          Read the tutorial
-        </a>{" "}
-        ·{" "}
-        <a
-          href="https://github.com/Timonwa/react-chat"
-          target="_blank"
-          rel="noreferrer">
-          ⭐ Star on GitHub
-        </a>{" "}
-        ·{" "}
-        Built by{" "}
-        <a href="https://links.timonwa.com" target="_blank" rel="noreferrer">
-          Timonwa
-        </a>
-      </footer>}
     </div>
   );
 }

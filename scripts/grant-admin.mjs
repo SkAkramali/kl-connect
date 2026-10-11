@@ -1,0 +1,10 @@
+import { getAuth } from "firebase-admin/auth";
+import { initAdmin } from "./firebaseAdmin.mjs";
+const email = process.argv[2]?.toLowerCase();
+const designatedAdmin = "naseemaarsha02@gmail.com";
+if (email !== designatedAdmin) throw new Error(`Usage: node scripts/grant-admin.mjs ${designatedAdmin}`);
+initAdmin();
+const user = await getAuth().getUserByEmail(email);
+if (!user.emailVerified) throw new Error("Refusing to grant admin: the designated account email is not verified.");
+await getAuth().setCustomUserClaims(user.uid, { ...(user.customClaims || {}), admin: true });
+console.log(`Granted admin to ${user.email}. They must sign out and back in.`);

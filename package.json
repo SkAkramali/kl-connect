@@ -20,7 +20,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "cleanup:monthly": "node scripts/cleanup-monthly.mjs"
+    "cleanup:monthly": "node scripts/cleanup-monthly.mjs",
+    "grant:admin": "node scripts/grant-admin.mjs"
   },
   "eslintConfig": {
     "extends": [

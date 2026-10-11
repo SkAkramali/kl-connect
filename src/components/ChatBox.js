@@ -13,6 +13,8 @@ import CopyCode from "./CopyCode";
 
 const ChatBox = ({ activeRoom }) => {
   const [messages, setMessages] = useState([]);
+  const [status, setStatus] = useState("loading");
+  const [error, setError] = useState("");
   const messagesRef = useRef(null);
 
   const roomLabel = useMemo(() => {
@@ -25,8 +27,10 @@ const ChatBox = ({ activeRoom }) => {
   useEffect(() => {
     if (!activeRoom?.id) {
       setMessages([]);
+      setStatus("idle");
       return undefined;
     }
+    setStatus("loading"); setError("");
 
     const q = query(
       collection(db, "rooms", activeRoom.id, "messages"),
@@ -42,7 +46,8 @@ const ChatBox = ({ activeRoom }) => {
         }))
         .reverse();
       setMessages(fetchedMessages);
-    });
+      setStatus("ready");
+    }, listenerError => { setError("Messages could not be loaded. Please try again."); setStatus("error"); });
 
     return () => unsubscribe();
   }, [activeRoom?.id]);
@@ -50,7 +55,7 @@ const ChatBox = ({ activeRoom }) => {
   useEffect(() => {
     // Scroll the message list itself to the bottom — not the whole window.
     const el = messagesRef.current;
-    if (el) {
+    if (el && el.scrollHeight - el.scrollTop - el.clientHeight < 120) {
       el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
     }
   }, [messages]);
@@ -70,13 +75,13 @@ const ChatBox = ({ activeRoom }) => {
         )}
       </header>
       <div className="messages-wrapper" ref={messagesRef}>
-        {messages.length ? (
+        {status === "loading" ? <div className="messages-empty"><p>Loading conversation…</p></div> : error ? <div className="messages-empty messages-empty--error"><p>{error}</p></div> : messages.length ? (
           messages.map(message => (
             <Message key={message.id} message={message} />
           ))
         ) : (
           <div className="messages-empty">
-            <p>No messages yet. Start the conversation.</p>
+            <p>No messages yet. Be the first to start the conversation.</p>
           </div>
         )}
       </div>

@@ -1,90 +1,18 @@
 import React from "react";
-import GoogleSignin from "../img/google-button.png";
 import { auth } from "../firebase";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import CopyCode from "./CopyCode";
 
 const Welcome = () => {
-  const blogUrl =
-    "https://tech.timonwa.com/blog/create-multi-room-chat-app-using-react-firebase";
-  const termsUrl = "https://tech.timonwa.com/terms";
-
-  const googleSignIn = () => {
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider);
-  };
+  const googleSignIn = () => signInWithPopup(auth, new GoogleAuthProvider());
+  const scrollToFeatures = () => document.getElementById("features")?.scrollIntoView({ behavior: "smooth" });
 
   return (
-    <main className="welcome">
-      <div className="welcome-card">
-        <span className="welcome-tag">Updated for React 19 + Firebase v12</span>
-        <h2>Welcome to React Chat.</h2>
-        <p>
-          Sign in with Google to chat with fellow React developers in public or
-          private rooms.
-        </p>
-        <button className="sign-in" type="button" onClick={googleSignIn}>
-          <img src={GoogleSignin} alt="sign in with google" />
-        </button>
-        <p className="welcome-disclaimer">
-          <strong>Updated guide:</strong> The{" "}
-          <a href={blogUrl} target="_blank" rel="noreferrer">
-            2026 walkthrough
-          </a>{" "}
-          is on my blog. Looking for the original 2023 version?{" "}
-          <a
-            href="https://tech.timonwa.com/blog/building-a-real-time-chat-app-with-reactjs-and-firebase"
-            target="_blank"
-            rel="noreferrer">
-            Read it on my blog
-          </a>{" "}
-          (originally published on{" "}
-          <a
-            href="https://www.freecodecamp.org/news/building-a-real-time-chat-app-with-reactjs-and-firebase/"
-            target="_blank"
-            rel="noreferrer">
-            freeCodeCamp
-          </a>
-          ), and use the legacy code on the{" "}
-          <a
-            href="https://github.com/Timonwa/react-chat/tree/freecodecamp-original"
-            target="_blank"
-            rel="noreferrer">
-            freecodecamp-original
-          </a>{" "}
-          branch.
-        </p>
-        <p className="welcome-disclaimer welcome-disclaimer--muted">
-          Signing in stores your Google email, name, avatar, and messages in
-          Firebase so the chat can work. Demo data is cleared on the 1st of each
-          month. See the{" "}
-          <a href={termsUrl} target="_blank" rel="noreferrer">
-            terms of use
-          </a>{" "}
-          for details.
-        </p>
-      </div>
-
-      <div className="welcome-card">
-        <div className="demo-rooms">
-          <h3>Demo Private Rooms</h3>
-          <p>Try these pre-created private rooms to test the feature:</p>
-          <div className="room-codes">
-            <div className="room-code">
-              <strong>React Tips:</strong> <CopyCode code="0695-RJ9I" />
-            </div>
-            <div className="room-code">
-              <strong>Firebase Chat:</strong> <CopyCode code="P8IB-A98Z" />
-            </div>
-            <div className="room-code">
-              <strong>Modern UI:</strong> <CopyCode code="64KN-6OXP" />
-            </div>
-          </div>
-          <p className="room-code-note">
-            Copy a code above and paste it to join the private room.
-          </p>
-        </div>
-      </div>
+    <main className="landing-page">
+      <section className="landing-hero" id="home"><div className="landing-copy"><p className="landing-kicker">KL CONNECT · CAMPUS COMMUNICATION</p><h2>Your Campus. Your Conversations. Connected.</h2><p className="landing-lede">A smarter place for students to connect, collaborate, and stay in sync with their campus community.</p><div className="landing-cta"><button className="landing-primary" onClick={googleSignIn}>Get started</button><button className="landing-secondary" onClick={scrollToFeatures}>Explore features</button></div><p className="landing-note">Sign in securely with your Google account to join the conversation.</p></div><div className="landing-preview" aria-label="KL Connect chat preview"><div className="preview-top"><span className="preview-mark">K</span><span><b>Design Studio</b><small>8 members</small></span><i>•••</i></div><div className="preview-thread"><div className="preview-message"><b>Anika</b><p>Are we ready for tomorrow's review?</p><small>10:24 AM</small></div><div className="preview-message preview-message--own"><p>Almost there — sharing the final notes now.</p><small>10:26 AM</small></div><div className="preview-message"><b>Rahul</b><p>Great, I’ll add the presentation link.</p><small>10:27 AM</small></div></div><div className="preview-compose">Write a message <span>➤</span></div></div></section>
+      <section className="landing-section" id="features"><p className="landing-kicker">BUILT FOR THE CAMPUS DAY</p><h2>Everything you need to stay in the loop.</h2><div className="feature-grid"><article><span>↯</span><h3>Real-time messaging</h3><p>Keep conversations moving with live room updates.</p></article><article><span>⌁</span><h3>Public & private rooms</h3><p>Collaborate openly or use an invite code for focused discussions.</p></article><article><span>✓</span><h3>Secure sign-in</h3><p>Use Google Authentication to access your campus conversations.</p></article><article><span>◫</span><h3>Ready everywhere</h3><p>A responsive workspace that adapts to phones, tablets, and desktops.</p></article></div></section>
+      <section className="landing-section landing-how" id="about"><p className="landing-kicker">HOW IT WORKS</p><h2>Start a meaningful conversation in three steps.</h2><div className="steps"><article><b>01</b><h3>Sign in securely</h3><p>Use your existing Google account to get started.</p></article><article><b>02</b><h3>Find your room</h3><p>Join a public conversation or enter a private room code.</p></article><article><b>03</b><h3>Collaborate</h3><p>Share updates and stay connected with classmates.</p></article></div></section>
+      <section className="landing-final"><div><p className="landing-kicker">READY WHEN YOU ARE</p><h2>Join your campus conversation.</h2></div><button className="landing-primary" onClick={googleSignIn}>Get started</button></section>
+      <footer className="landing-footer"><b>KL Connect</b><span>Built for campus conversations.</span><a href="#home">Home</a><a href="#features">Features</a><a href="#about">About</a></footer>
     </main>
   );
 };

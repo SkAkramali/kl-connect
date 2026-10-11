@@ -8,9 +8,12 @@ import { useEffect, useState } from "react";
 import { auth, db } from "./firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import AdminDashboard from "./components/AdminDashboard";
 
 function App() {
   const [user] = useAuthState(auth);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [view, setView] = useState("chat");
   const [activeRoom, setActiveRoom] = useState({
     id: "general",
     name: "General",
@@ -22,6 +25,16 @@ function App() {
   // sign-in would be denied with "Missing or insufficient permissions".
   useEffect(() => {
     if (!user) return;
+
+    user.getIdTokenResult().then(result => setIsAdmin(result.claims.admin === true));
+    const profileRef = doc(db, "users", user.uid);
+    getDoc(profileRef).then(profile => setDoc(profileRef, {
+      displayName: user.displayName || "KL Connect student",
+      photoURL: user.photoURL || null,
+      email: user.email || null,
+      ...(profile.exists() ? {} : { createdAt: serverTimestamp() }),
+      lastActiveAt: serverTimestamp(),
+    }, { merge: true })).catch(console.error);
 
     const ensureGeneralRoom = async () => {
       const generalRef = doc(db, "rooms", "general");
@@ -46,8 +59,15 @@ function App() {
     ensureGeneralRoom();
   }, [user]);
 
+  useEffect(() => {
+    if (!user) { setIsAdmin(false); setView("chat"); }
+  }, [user]);
+
   // Which side panel is open as a drawer on small screens: "rooms" | "actions" | null.
-  const [openPanel, setOpenPanel] = useState(null);
+  // On phones, start with the conversation list just like a messaging app.
+  const [openPanel, setOpenPanel] = useState(() =>
+    typeof window !== "undefined" && window.innerWidth <= 980 ? "rooms" : null,
+  );
 
   const handleSelectRoom = room => {
     setActiveRoom(room);
@@ -56,9 +76,11 @@ function App() {
 
   return (
     <div className="App">
-      <NavBar />
+      <NavBar isAdmin={isAdmin} view={view} onViewChange={setView} isLanding={!user} adminSetupRequired={user?.email === "naseemaarsha02@gmail.com" && !isAdmin} />
       {!user ? (
         <Welcome />
+      ) : view === "admin" && isAdmin ? (
+        <AdminDashboard onBackToChat={() => setView("chat")} />
       ) : (
         <div className="app-shell">
           <div className="panel-toggles">
@@ -98,7 +120,7 @@ function App() {
           )}
         </div>
       )}
-      <footer className="app-footer">
+      {user && <footer className="app-footer">
         <a
           href="https://tech.timonwa.com/blog/create-multi-room-chat-app-using-react-firebase"
           target="_blank"
@@ -117,7 +139,7 @@ function App() {
         <a href="https://links.timonwa.com" target="_blank" rel="noreferrer">
           Timonwa
         </a>
-      </footer>
+      </footer>}
     </div>
   );
 }
